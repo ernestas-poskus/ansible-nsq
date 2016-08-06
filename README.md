@@ -3,6 +3,8 @@ ansible-nsq
 
 NSQ realtime distributed messaging platform Ansible installation role
 
+![NSQ admin](/assets/nsq_admin_nodes.png)
+
 Installation
 ------------
 
