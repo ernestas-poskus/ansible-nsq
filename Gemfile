@@ -1,10 +1,8 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem "test-kitchen"
-gem "kitchen-ansible"
-gem "kitchen-vagrant"
-
-group :integration do
-  gem 'serverspec'
-  gem 'specinfra'
-end
+gem 'test-kitchen'
+gem 'kitchen-ansible'
+gem 'kitchen-vagrant'
+gem 'rake'
+gem 'serverspec'
+gem 'specinfra'
