@@ -1,7 +1,7 @@
 ansible-nsq
 =========
 
-NSQ realtime distributed messaging platform Ansible installation role
+NSQ realtime distributed messaging platform Ansible installation role.
 
 ![NSQ admin](/assets/nsq_admin_nodes.png)
 
@@ -10,10 +10,34 @@ Installation
 
 ansible-galaxy install ernestas-poskus.nsq
 
+Example Playbook
+----------------
+
+```yaml
+- name: Installing NSQ
+  hosts: all
+  sudo: yes
+  roles:
+    - role: ernestas-poskus.nsq
+```
+
+Example for multiple node setup
+----------------
+
+```yaml
+- name: Installing NSQ
+  hosts: nsqs
+  sudo: yes
+  roles:
+    - role: ernestas-poskus.nsq
+      nsq_lookupd_tcp_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
+      nsq_lookupd_http_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
+```
+
 Requirements
 ------------
 
-Node.
+None.
 
 Role Variables
 --------------
@@ -179,30 +203,6 @@ Dependencies
 ------------
 
 None.
-
-Example Playbook
-----------------
-
-```yaml
-- name: Installing NSQ
-  hosts: all
-  sudo: yes
-  roles:
-    - role: ernestas-poskus.nsq
-```
-
-Example for multiple node setup
-----------------
-
-```yaml
-- name: Installing NSQ
-  hosts: nsqs
-  sudo: yes
-  roles:
-    - role: ernestas-poskus.nsq
-      nsq_lookupd_tcp_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
-      nsq_lookupd_http_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
-```
 
 Testing
 ------------
