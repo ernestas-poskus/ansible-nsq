@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - role: role_under_test
+      nsq_version: 0.3.8
+      nsq_go_version: go1.6.2
+      nsq_arch: linux-amd64
