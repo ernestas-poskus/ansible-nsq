@@ -48,14 +48,26 @@ nsq_binaries:
   - nsq_to_nsq
   - to_nsq
 
+nsq_network_interface: "{{ ansible_default_ipv4.interface }}"
+nsq_network_ip_protocol: 'ipv4'
+
+nsq_lookupd_tcp_port: 4160
+nsq_lookupd_http_port: 4161
+
+nsq_lookupd_tcp_addresses:
+  - "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}"
+
+nsq_lookupd_http_addresses:
+  - "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}"
+
 nsq_nsqlookupd:
   broadcast_address: "{{ ansible_hostname }}"
   # address of this lookupd node, (default to the OS hostname)
-  http_address: '0.0.0.0:4161'
+  http_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:{{ nsq_lookupd_http_port }}"
   # <addr>:<port> to listen on for HTTP clients (default "0.0.0.0:4161")
-  inactive_producer-timeout: 300s
+  inactive_producer_timeout: 300s
   # duration of time a producer will remain in the active list since its last ping (default 5m0s)
-  tcp_address: '0.0.0.0:4160'
+  tcp_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:{{ nsq_lookupd_tcp_port }}"
   # <addr>:<port> to listen on for TCP clients (default "0.0.0.0:4160")
   tombstone_lifetime: 45s
   # duration of time a producer will remain tombstoned if registration remains (default 45s)
@@ -73,12 +85,10 @@ nsq_nsqd:
   #  message processing time percentiles (as float (0, 1.0]) to track (can be specified multiple times or comma separated '1.0,0.99,0.95', default none)
   e2e_processing_latency_window_time: 600s
   #  calculate end to end latency quantiles for this duration of time (ie: 60s would only show quantile calculations from the past 60 seconds) (default 10m0s)
-  http_address: '0.0.0.0:4151'
+  http_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:4151"
   #  <addr>:<port> to listen on for HTTP clients (default "0.0.0.0:4151")
-  https_address: '0.0.0.0:4152'
+  https_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:4152"
   #  <addr>:<port> to listen on for HTTPS clients (default "0.0.0.0:4152")
-  lookupd_tcp_address: "{{ nsq_nsqlookupd['tcp_address'] }}"
-  #  lookupd TCP address (may be given multiple times)
   max_body_size: 5242880
   #  maximum size of a single command body (default 5242880)
   max_bytes_per_file: 104857600
@@ -117,7 +127,7 @@ nsq_nsqd:
   #  number of messages per diskqueue fsync (default 2500)
   sync_timeout: 2s
   #  duration of time per diskqueue fsync (default 2s)
-  tcp_address: '0.0.0.0:4150'
+  tcp_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:4150"
   #  <addr>:<port> to listen on for TCP clients (default "0.0.0.0:4150")
   tls_cert:
   #  path to certificate file
@@ -137,7 +147,7 @@ nsq_nsqd:
 nsq_nsqadmin:
   graphite_url:
   # graphite HTTP address
-  http_address: '0.0.0.0:4171'
+  http_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:4171"
   # <addr>:<port> to listen on for HTTP clients (default "0.0.0.0:4171")
   http_client_tls_cert:
   # path to certificate file for the HTTP client
@@ -147,12 +157,8 @@ nsq_nsqadmin:
   # path to key file for the HTTP client
   http_client_tls_root_ca_file:
   # path to CA file for the HTTP client
-  lookupd_http_address: "{% if nsq_nsqlookupd['http_address'] is defined %}{{ nsq_nsqlookupd['http_address']}}{% endif %}"
-  # lookupd HTTP address (may be given multiple times)
   notification_http_endpoint:
   # HTTP endpoint (fully qualified) to which POST notifications of admin actions will be sent
-  nsqd_http_address:
-  # nsqd HTTP address (may be given multiple times)
   proxy_graphite:
   # proxy HTTP requests to graphite
   statsd_counter_format: 'stats.counters.%s.count'
@@ -182,6 +188,32 @@ Example Playbook
   roles:
     - role: ernestas-poskus.nsq
 ```
+
+Example for multiple node setup
+----------------
+
+```yaml
+- name: Installing NSQ
+  hosts: nsqs
+  sudo: yes
+  roles:
+    - role: ernestas-poskus.nsq
+      nsq_lookupd_tcp_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
+      nsq_lookupd_http_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
+```
+
+Testing
+------------
+
+You have to install Ruby and VirtualBox for testing in virtual machine.
+
+```bash
+gem install bundler
+bundle install
+bundle exec kitchen test
+```
+
+=======
 
 License
 -------

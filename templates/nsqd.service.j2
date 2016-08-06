@@ -6,7 +6,8 @@ After=network.target
 Wants=network.target
 
 [Service]
-ExecStart={{ nsq_install_directory }}/{{ nsq_release }}/bin/nsqd {{ nsq_nsqd_opts }}
+ExecStart={{ nsq_install_directory }}/{{ nsq_release }}/bin/nsqd {{ nsq_nsqd_opts }} {% if nsq_nsqlookupd %}{% for item in nsq_lookupd_tcp_addresses %}-lookupd-tcp-address={{ item }}:{{ nsq_lookupd_tcp_port }} {% endfor %}{% endif %}
+
 Restart=always
 RestartSec=20
 TimeoutSec=300

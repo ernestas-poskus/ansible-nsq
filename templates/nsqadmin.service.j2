@@ -6,7 +6,8 @@ After=network.target
 Wants=network.target
 
 [Service]
-ExecStart={{ nsq_install_directory }}/{{ nsq_release }}/bin/nsqadmin {{ nsq_nsqadmin_opts }}
+ExecStart={{ nsq_install_directory }}/{{ nsq_release }}/bin/nsqadmin {{ nsq_nsqadmin_opts }} {% if nsq_nsqlookupd %}{% for item in nsq_lookupd_http_addresses %}-lookupd-http-address={{ item }}:{{ nsq_lookupd_http_port }} {% endfor %}{% endif %}
+
 KillSignal=SIGTERM
 KillMode=process
 TimeoutSec=30s
