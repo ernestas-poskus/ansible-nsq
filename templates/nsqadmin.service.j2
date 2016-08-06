@@ -1,0 +1,21 @@
+# {{ansible_managed}}
+
+[Unit]
+Description=NSQ nsqadmin service
+After=network.target
+Wants=network.target
+
+[Service]
+ExecStart={{ nsq_install_directory }}/{{ nsq_release }}/bin/nsqadmin {{ nsq_nsqadmin_opts }}
+KillSignal=SIGTERM
+KillMode=process
+TimeoutSec=30s
+Restart=on-failure
+RestartSec=10s
+User={{ nsq_owner }}
+Group={{ nsq_group }}
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

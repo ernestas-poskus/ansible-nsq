@@ -1,0 +1,29 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 2048
+    cpus: 2
+  network:
+  # - ["forwarded_port", { guest: 4150, host: 4150 }] # NSQ nsqd TCP
+  # - ["forwarded_port", { guest: 4151, host: 4151 }] # NSQ nsqd HTTP
+  # - ["forwarded_port", { guest: 4152, host: 4152 }] # NSQ nsqd HTTPS
+  # - ["forwarded_port", { guest: 4160, host: 4160 }] # NSQ lookupd TCP
+  # - ["forwarded_port", { guest: 4161, host: 4161 }] # NSQ lookupd HTTP
+  # - ["forwarded_port", { guest: 4171, host: 4171 }] # NSQ admin HTTP
+
+provisioner:
+  name: ansible_playbook
+  hosts: all
+  require_ruby_for_busser: false
+  require_chef_for_busser: true
+  ansible_verbose: true
+  ansible_verbosity: 2
+  idempotency_test: true
+
+platforms:
+  - name: centos-7.2
+  - name: ubuntu-15.04
+
+suites:
+  - name: default

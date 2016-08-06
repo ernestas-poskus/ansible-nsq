@@ -1,0 +1,9 @@
+---
+# vars file for ansible-nsq
+nsq_release: "nsq-{{ nsq_version }}.{{ nsq_arch }}.{{ nsq_go_version }}"
+nsq_release_archive: "{{ nsq_release }}.tar.gz"
+nsq_download_url: "https://s3.amazonaws.com/bitly-downloads/nsq/{{ nsq_release_archive }}"
+
+nsq_nsqd_opts: "{% for key, value in nsq_nsqd.iteritems() if value is not none %}-{{ key | replace('_', '-') }}={{ value }} {% endfor %}"
+nsq_nsqadmin_opts: "{% for key, value in nsq_nsqadmin.iteritems() if value is not none %}-{{ key | replace('_', '-') }}={{ value }} {% endfor %}"
+nsq_nsqlookupd_opts: "{% for key, value in nsq_nsqlookupd.iteritems() if value is not none %}-{{ key | replace('_', '-') }}={{ value }} {% endfor %}"

@@ -1,0 +1,14 @@
+---
+# handlers file for ansible-nsq
+
+- name: reload daemon
+  command: systemctl daemon-reload
+
+- name: restart nsqd
+  service: name=nsqd state=restarted enabled=yes
+
+- name: restart nsqadmin
+  service: name=nsqadmin state=restarted enabled=yes
+
+- name: restart nsqlookupd
+  service: name=nsqlookupd state=restarted enabled=yes

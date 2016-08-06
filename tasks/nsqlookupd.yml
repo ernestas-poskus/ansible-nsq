@@ -1,0 +1,13 @@
+---
+- name: Check if systemd exists
+  stat: path=/etc/systemd/system
+  register: systemd_check
+
+- name: Install nsqlookupd systemd service
+  template:
+    src: nsqlookupd.service.j2
+    dest: /etc/systemd/system/nsqlookupd.service
+  when: systemd_check.stat.exists == true
+  notify:
+    - reload daemon
+    - restart nsqlookupd

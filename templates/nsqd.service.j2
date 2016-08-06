@@ -1,0 +1,19 @@
+# {{ansible_managed}}
+
+[Unit]
+Description=NSQ nsqd service
+After=network.target
+Wants=network.target
+
+[Service]
+ExecStart={{ nsq_install_directory }}/{{ nsq_release }}/bin/nsqd {{ nsq_nsqd_opts }}
+Restart=always
+RestartSec=20
+TimeoutSec=300
+User={{ nsq_owner }}
+Group={{ nsq_group }}
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
