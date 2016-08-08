@@ -3,6 +3,10 @@ ansible-nsq
 
 NSQ realtime distributed messaging platform Ansible installation role.
 
+Role manages NSQ by systemd. Supported platforms below:
+ - CentOS: >7
+ - Ubuntu: >15.04 (vivid)
+
 ![NSQ admin](/assets/nsq_admin_nodes.png)
 
 Installation
@@ -33,6 +37,8 @@ Example for multiple node setup
       nsq_lookupd_tcp_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
       nsq_lookupd_http_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
 ```
+
+For multi node setup update nsqd['broadcast_address'] or provision your hosts so they can find each other.
 
 Requirements
 ------------
