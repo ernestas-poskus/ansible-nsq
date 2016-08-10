@@ -83,23 +83,25 @@ nsq_binaries:
 nsq_network_interface: "{{ ansible_default_ipv4.interface }}"
 nsq_network_ip_protocol: 'ipv4'
 
+nsq_network_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}"
+
 nsq_lookupd_tcp_port: 4160
 nsq_lookupd_http_port: 4161
 
 nsq_lookupd_tcp_addresses:
-  - "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}"
+  - "{{ nsq_network_address }}"
 
 nsq_lookupd_http_addresses:
-  - "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}"
+  - "{{ nsq_network_address }}"
 
 nsq_nsqlookupd:
   broadcast_address: "{{ ansible_hostname }}"
   # address of this lookupd node, (default to the OS hostname)
-  http_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:{{ nsq_lookupd_http_port }}"
+  http_address: "{{ nsq_network_address }}:{{ nsq_lookupd_http_port }}"
   # <addr>:<port> to listen on for HTTP clients (default "0.0.0.0:4161")
   inactive_producer_timeout: 300s
   # duration of time a producer will remain in the active list since its last ping (default 5m0s)
-  tcp_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:{{ nsq_lookupd_tcp_port }}"
+  tcp_address: "{{ nsq_network_address }}:{{ nsq_lookupd_tcp_port }}"
   # <addr>:<port> to listen on for TCP clients (default "0.0.0.0:4160")
   tombstone_lifetime: 45s
   # duration of time a producer will remain tombstoned if registration remains (default 45s)
@@ -117,9 +119,9 @@ nsq_nsqd:
   #  message processing time percentiles (as float (0, 1.0]) to track (can be specified multiple times or comma separated '1.0,0.99,0.95', default none)
   e2e_processing_latency_window_time: 600s
   #  calculate end to end latency quantiles for this duration of time (ie: 60s would only show quantile calculations from the past 60 seconds) (default 10m0s)
-  http_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:4151"
+  http_address: "{{ nsq_network_address }}:4151"
   #  <addr>:<port> to listen on for HTTP clients (default "0.0.0.0:4151")
-  https_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:4152"
+  https_address: "{{ nsq_network_address }}:4152"
   #  <addr>:<port> to listen on for HTTPS clients (default "0.0.0.0:4152")
   max_body_size: 5242880
   #  maximum size of a single command body (default 5242880)
@@ -159,7 +161,7 @@ nsq_nsqd:
   #  number of messages per diskqueue fsync (default 2500)
   sync_timeout: 2s
   #  duration of time per diskqueue fsync (default 2s)
-  tcp_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:4150"
+  tcp_address: "{{ nsq_network_address }}:4150"
   #  <addr>:<port> to listen on for TCP clients (default "0.0.0.0:4150")
   tls_cert:
   #  path to certificate file
@@ -179,7 +181,7 @@ nsq_nsqd:
 nsq_nsqadmin:
   graphite_url:
   # graphite HTTP address
-  http_address: "{{ hostvars[inventory_hostname]['ansible_' + nsq_network_interface][nsq_network_ip_protocol]['address'] }}:4171"
+  http_address: "{{ nsq_network_address }}:4171"
   # <addr>:<port> to listen on for HTTP clients (default "0.0.0.0:4171")
   http_client_tls_cert:
   # path to certificate file for the HTTP client
