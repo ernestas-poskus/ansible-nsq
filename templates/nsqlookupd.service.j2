@@ -7,11 +7,10 @@ Wants=network.target
 
 [Service]
 ExecStart={{ nsq_install_directory }}/{{ nsq_release }}/bin/nsqlookupd {{ nsq_nsqlookupd_opts }}
-KillSignal=SIGTERM
-KillMode=process
-TimeoutSec=30s
-Restart=on-failure
-RestartSec=10s
+
+Restart=always
+RestartSec=20
+TimeoutSec=300
 User={{ nsq_owner }}
 Group={{ nsq_group }}
 StandardOutput=journal
