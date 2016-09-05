@@ -7,7 +7,7 @@ NSQ realtime distributed messaging platform Ansible installation role.
 
 Role manages NSQ by systemd. Supported platforms below:
  - CentOS: >7
- - Ubuntu: >15.04 (vivid)
+ - Ubuntu: >16.04 (xenial)
 
 ![NSQ admin](/assets/nsq_admin_nodes.png)
 
