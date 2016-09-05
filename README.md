@@ -1,6 +1,8 @@
 ansible-nsq
 =========
 
+[![Build Status](https://travis-ci.org/ernestas-poskus/ansible-nsq.svg?branch=master)](https://travis-ci.org/ernestas-poskus/ansible-nsq)
+
 NSQ realtime distributed messaging platform Ansible installation role.
 
 ![NSQ admin](/assets/nsq_admin_nodes.png)
