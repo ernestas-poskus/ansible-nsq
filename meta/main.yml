@@ -37,8 +37,6 @@ galaxy_info:
         - 7
     - name: Ubuntu
       versions:
-        - vivid
-        - wily
         - xenial
   #- name: GenericUNIX
   #  versions:
