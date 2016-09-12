@@ -14,7 +14,7 @@ Role manages NSQ by systemd. Supported platforms below:
 Installation
 ------------
 
-ansible-galaxy install ernestas-poskus.nsq
+ansible-galaxy install ernestas-poskus.ansible-nsq
 
 Example Playbook
 ----------------
@@ -24,7 +24,7 @@ Example Playbook
   hosts: all
   sudo: yes
   roles:
-    - role: ernestas-poskus.nsq
+    - role: ernestas-poskus.ansible-nsq
 ```
 
 Example for multiple node setup
@@ -35,7 +35,7 @@ Example for multiple node setup
   hosts: nsqs
   sudo: yes
   roles:
-    - role: ernestas-poskus.nsq
+    - role: ernestas-poskus.ansible-nsq
       nsq_lookupd_tcp_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
       nsq_lookupd_http_addresses: "{{ groups['nsqs']|map('extract', hostvars, ['ansible_eth1', 'ipv4', 'address'])|list }}"
 ```
