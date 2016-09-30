@@ -70,7 +70,7 @@ nsq_install_directory: /opt
 nsq_config_directory: /etc/nsq
 nsq_config_directory_mode: 0644
 
-nsq_data_directory: /var/spool/nsq
+nsq_data_directory: /var/lib/nsq
 nsq_data_directory_mode: 0750
 
 nsq_binaries:
