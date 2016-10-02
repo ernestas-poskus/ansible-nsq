@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  remote_user: root
+  sudo: yes
+  tasks:
+    # NSQ
+    - name: Check if nsqd service is enabled
+      command: systemctl is-enabled nsqd
+      register: command_result
+      failed_when: "'disabled' in command_result.stdout"
+
+    - shell: "systemctl status nsqd | grep -i running"
+      register: status
+      failed_when: status.rc != 0
+
+    # NSQlookupd
+    - name: Check if nsqd service is enabled
+      command: systemctl is-enabled nsqd
+      register: command_result
+      failed_when: "'disabled' in command_result.stdout"
+
+    - shell: "systemctl status nsqd | grep -i running"
+      register: status
+      failed_when: status.rc != 0
+
+    # NSQadmin
+    - name: Check if nsqadmin service is enabled
+      command: systemctl is-enabled nsqadmin
+      register: command_result
+      failed_when: "'disabled' in command_result.stdout"
+
+    - shell: "systemctl status nsqadmin | grep -i running"
+      register: status
+      failed_when: status.rc != 0

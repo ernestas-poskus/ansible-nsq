@@ -6,3 +6,6 @@
       nsq_version: 0.3.8
       nsq_go_version: go1.6.2
       nsq_arch: linux-amd64
+      nsq_nsqd_install: true
+      nsq_nsqadmin_install: true
+      nsq_nsqlookupd_install: true
