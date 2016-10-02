@@ -53,6 +53,12 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
+  # Test role.
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml'
+
+  # View container logs
+  - 'sudo docker logs "$(cat ${container_id})"'
+
   # Clean up.
   - 'sudo docker stop "$(cat ${container_id})"'
 
